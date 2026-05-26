@@ -82,10 +82,12 @@
     const wx = data.weather;
     let weatherChip = "";
     if (wx.available) {
-      const rainBit = wx.rain_soon_mm === null ? ""
-        : wx.rain_soon_mm >= 1 ? `~${Math.round(wx.rain_soon_mm)}mm rain next 2 days`
+      const rainIn = wx.rain_soon_in ?? (wx.rain_soon_mm !== null ? wx.rain_soon_mm / 25.4 : null);
+      const rainBit = rainIn === null ? ""
+        : rainIn >= 0.1 ? `~${rainIn.toFixed(1)}" rain next 2 days`
         : "Little to no rain";
-      const tempBit = wx.high_today_c !== null ? `${Math.round(wx.high_today_c)}°C high today` : "";
+      const tempF = wx.high_today_f ?? (wx.high_today_c !== null ? Math.round(wx.high_today_c * 9/5 + 32) : null);
+      const tempBit = tempF !== null ? `${tempF}°F high today` : "";
       const txt = [rainBit, tempBit].filter(Boolean).join(" · ");
       weatherChip = `<span class="hero-weather">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
